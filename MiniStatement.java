@@ -1,0 +1,342 @@
+
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.toedter.calendar.JDateChooser;
+import java.awt.Color;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+
+/**
+ *
+ * @author rajaselvam.s
+ */
+public class MiniStatement extends javax.swing.JFrame {
+
+    /**
+     * Creates new form MiniStatement
+     */
+    public MiniStatement() {
+        initComponents();
+        this.setLocationRelativeTo(null);
+        miniStatementTable.setRowHeight(40);
+        miniStatementTable.setShowGrid(true);
+        miniStatementTable.setGridColor(Color.red);
+        miniStatementTable.setSelectionBackground(Color.black);
+    } 
+    
+      String myDate;
+      String time;
+    public void getDate(){
+        Date date = new Date();
+        SimpleDateFormat d = new SimpleDateFormat("dd-MM-YYYY");
+         myDate = d.format(date);
+         
+    }
+    String accountNo;
+     public void my_update(String str) {
+       accountNo =str;
+       System.out.println("hello");
+       System.out.println(accountNo+"print");
+	accLab.setText(str);
+        accLab.setVisible(false);
+         DisplayTr();
+         
+	}
+    public void DisplayTr(){
+        try {
+            System.out.println(accountNo+"printisplayTr");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/signup","root","ramki@123");
+            Statement stmt =con.createStatement();
+            ResultSet rst =stmt.executeQuery("select AccountNumber, Date,Amount,Balance,transactionType from transactions where  AccountNumber ="+accountNo+"");
+           // miniStatementTable.setModel(Dbutils.resultSetToTableModel(rst));
+           
+       DefaultTableModel model=(DefaultTableModel)miniStatementTable.getModel();
+        
+            while(rst.next())
+            {
+                model.addRow(new Object[]{
+                    rst.getString(1),rst.getString(2),rst.getString(3),rst.getString(4),rst.getString(5)});
+                }
+            rst.close();
+        }
+         catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "exception");
+        }
+    }
+  
+       
+       
+      
+   
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jButton1 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        miniStatementTable = new javax.swing.JTable();
+        jButton3 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        accLab = new javax.swing.JLabel();
+
+        jButton1.setText("jButton1");
+
+        jLabel2.setText("jLabel2");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 204, 255), 10));
+
+        jPanel2.setBackground(new java.awt.Color(51, 204, 255));
+        jPanel2.setForeground(new java.awt.Color(51, 204, 255));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setText("MiniStatement");
+
+        miniStatementTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "AccountNumber", "Date", "Amount", "Balance", "Transcation"
+            }
+        ));
+        jScrollPane1.setViewportView(miniStatementTable);
+
+        jButton3.setBackground(new java.awt.Color(0, 255, 255));
+        jButton3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButton3.setText("Generate PDF");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addGap(208, 208, 208)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 761, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(jLabel1))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jButton2.setBackground(new java.awt.Color(51, 204, 255));
+        jButton2.setText("Back");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 771, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(96, 96, 96)
+                .addComponent(accLab, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(293, 293, 293)
+                .addComponent(jButton2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(accLab, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(25, 25, 25))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+       String str=accLab.getText(); // read the JTextFeild t1 data
+            MainMenu obj= new MainMenu ();// obj created for class Second()
+            obj.my_update(str);//Execute the method my_update to pass str
+            obj.setVisible(true); // Open the Second.java window
+            dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        
+        
+      
+        String path="D:\\Rajaselvam S\\Mini statement PDF";
+        com.itextpdf.text.Document doc=new com.itextpdf.text.Document();
+        try
+        {   
+           // my_update(accountNo);
+           
+            PdfWriter.getInstance(doc, new FileOutputStream(path+""+accountNo+".pdf"));
+            doc.open();
+            Paragraph paragraph1= new Paragraph("                                                Transaction Statement\n");
+            doc.add(paragraph1);
+            Paragraph paragraph2= new Paragraph("**************************************************************************************************************");
+            doc.add(paragraph2);
+        
+            
+            
+            PdfPTable tb1=new PdfPTable(5);
+            tb1.addCell("AccountNumber: ");
+            tb1.addCell("Date ");
+            tb1.addCell("Amount ");
+            tb1.addCell("Balance ");
+            tb1.addCell("Transaction ");
+            
+            for (int i = 0; i <miniStatementTable.getRowCount(); i++) {
+                String accountNumber =miniStatementTable.getValueAt(i, 0).toString();
+                String date =miniStatementTable.getValueAt(i, 1).toString();
+                String amount =miniStatementTable.getValueAt(i, 2).toString();
+                String balance =miniStatementTable.getValueAt(i, 3).toString();
+                String transaction =miniStatementTable.getValueAt(i, 4).toString();
+                tb1.addCell(accountNumber);
+                tb1.addCell(date);
+                tb1.addCell(amount);
+                tb1.addCell(balance);
+                tb1.addCell(transaction);
+                
+            }
+            
+            doc.add(tb1);
+            doc.add(paragraph2);
+            Paragraph paragraph3= new Paragraph("                                                 Thank You.");
+            doc.add(paragraph3);
+        }
+        catch(Exception e)
+        {
+           JOptionPane.showMessageDialog(null, e);
+        }
+        doc.close();
+         int a=JOptionPane.showConfirmDialog(this,"Do you want to Print Statement","",JOptionPane.YES_NO_OPTION);
+        
+        if(a==0)
+        {
+            try
+            {
+                if((new File("D:\\Rajaselvam S\\Mini statement PDF"+accountNo+".pdf")).exists())
+                {
+                    Process p =Runtime
+                            .getRuntime()
+                            .exec("rundll32 url.dll,FileProtocolHandler D:\\Rajaselvam S\\Mini statement PDF"+accountNo+".pdf");
+                }
+                else
+                   System.out.println("File is not Exists");
+            }
+            catch(Exception e)
+            {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        
+        
+        }
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+   // public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(MiniStatement.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(MiniStatement.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(MiniStatement.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(MiniStatement.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+        //</editor-fold>
+
+        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new MiniStatement().setVisible(true);
+//            }
+//        });
+   
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel accLab;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable miniStatementTable;
+    // End of variables declaration//GEN-END:variables
+}
